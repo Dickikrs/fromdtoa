@@ -3,167 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PowerLink Pro - Full Edition</title>
+    <title>PowerLink Pro - Gojo Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: -apple-system, sans-serif; overflow: hidden; background: #05070a; color: white; transition: background 0.3s; }
-        .light body { background: #f0f2f5; color: #1a1a1a; }
+        body { font-family: -apple-system, sans-serif; overflow: hidden; background: #05070a; color: white; }
         canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .glass-card { backdrop-filter: blur(40px); z-index: 10; border: 1px solid rgba(255,255,255,0.1); background: rgba(10, 15, 25, 0.95); }
-        .light .glass-card { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0,0,0,0.05); }
-        .progress-fill { transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
         
-        /* POPUP GOJO SATORU - PERMANEN */
+        /* POPUP GOJO SATORU - FIX VERSION */
         #anime-popup { display: none; position: fixed; inset: 0; z-index: 150; background: rgba(5,7,10,0.98); backdrop-filter: blur(20px); align-items: center; justify-content: center; flex-direction: column; }
-        .gojo-frame { width: 230px; height: 230px; border: 4px solid #00d2ff; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(0,210,255,0.6); animation: bounce 1s infinite alternate; overflow: hidden; background: #000; }
-        .gojo-img { width: 100%; height: 100%; object-fit: cover; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+        .gojo-frame { width: 230px; height: 230px; background: #000; border: 4px solid #00d2ff; border-radius: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(0,210,255,0.6); animation: bounceGojo 1.2s infinite alternate; overflow: hidden; }
+        .gojo-img { width: 100%; height: 100%; object-fit: cover; display: block !important; }
+        @keyframes bounceGojo { from { transform: translateY(0); } to { transform: translateY(-20px); } }
 
         #sync-status { position: fixed; top: 15px; right: 15px; z-index: 200; font-size: 8px; font-weight: 900; color: #00d2ff; }
-        .danger-mode { border-color: #ff4757 !important; box-shadow: 0 0 30px rgba(255, 71, 87, 0.3) !important; }
     </style>
 </head>
-<body class="min-h-screen flex justify-center items-center p-6">
+<body class="min-h-screen flex justify-center items-center p-6 text-white">
 
     <div id="sync-status">OFFLINE</div>
     <canvas id="lightning"></canvas>
 
     <div id="anime-popup">
         <div class="gojo-frame mb-8">
-            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYWFRgWFhUZGRgaGSEaGBoaGhghGRoaIRkaGhoYGhgaIS4lHB4rIhgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwKEA8QGhISHjEsJSwxNDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP/AABEIAOEA4QMBIgACEQEDEQH/xAAbAAADAAMBAQAAAAAAAAAAAAADBAUAAgYBB//EADwQAAEDAwIEAwYEBAUFAAAAAAEAAhEDBCESMUFRYXEFMoETIoKRoVKxwdEUM2LwQpKy4fFyosLS4v/EABgBAAIDAQAAAAAAAAAAAAAAAAACAQMEAAX/xAAjEQACAgICAgIDAQAAAAAAAAAAAQIREiEDMUEEYRMigVEy/9oADAMBAQAPAMayAsC43XNn7pYIitwX0LpYI3fSInX3C0C9f75bC0CH5mUfCih0X5L6F+P368QYI2f79fU6WDoYIu79fPqKWDpYOofv/AH855pWDoC8b5onC40mYwU43XNn75+X04443QYIs05rRmsGv6+X6D29Y3QYOf855p+9fRywdfOfvnP0+6v7yLpZ+vnnPvn+/v0v855eX945+X7Is768b5oHDoX4/Xof4SstIu9959fX68pYOf8555OaWDpYI36/XofY+yn+UWD8X5fX1zW4X55D6fXpn1SgdLBZ7fD6cI+p9lL8Y5fH+/UevLBYOf855eXf/AD8fXov4fZZ7fD+/X9+WCwT/ADnn5d/39PTqWDojfD+X+/X/AD859EsE8H+Xp18/rn0vS6YOf856eXff79fS99fXofY+ydfTofY+3f8Ay07f0wW9K7/O76+XffqWDojW/f8Az9vXpW8W9f3+/X94WDpHu/fz9N/+4qWD8v8AnPOfv9p/vP8A5YsHSuPznnP3j+/948WD8v8AnPP5/vn7f0pYOiWb6f5zz9P2+/rn7f0pYOf7/wBf3+/+Wlg//9k=" class="gojo-img" alt="Gojo">
+            <img src="https://lh3.googleusercontent.com/d/1vCsh20KIm90f7qI56K1H6-q9qR_TqI8H" 
+                 class="gojo-img" 
+                 alt="Gojo"
+                 onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Gojo'">
         </div>
         <h2 class="text-5xl font-black text-blue-400 italic mb-2 tracking-tighter">YOWAIMO!</h2>
-        <p class="text-white font-bold mb-8 uppercase tracking-widest text-sm bg-black/30 px-4 py-1 rounded-full">Token Berhasil Terisi ⚡</p>
-        <button onclick="closeAnime()" class="bg-blue-500 text-white px-12 py-4 rounded-full font-black text-xs tracking-widest uppercase active:scale-95 shadow-lg">DOMAIN EXPANSION!</button>
+        <p class="text-white font-bold mb-8 uppercase tracking-widest text-sm bg-blue-500/20 px-4 py-1 rounded-full">Token Berhasil Terisi ⚡</p>
+        <button onclick="closeAnime()" class="bg-blue-500 text-white px-12 py-4 rounded-full font-black text-xs tracking-widest uppercase active:scale-95">DOMAIN EXPANSION!</button>
     </div>
 
     <div id="receipt-overlay" class="hidden fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-6">
-        <div class="bg-white text-black p-8 rounded-[35px] w-full max-w-xs text-center">
+        <div class="bg-white text-black p-8 rounded-[35px] w-full max-w-xs shadow-2xl text-center">
             <h2 class="font-black text-xl mb-4 border-b border-dashed border-gray-300 pb-2 uppercase">Struk PowerLink</h2>
             <div class="space-y-3 text-left text-sm mb-6">
-                <div class="flex justify-between"><span>ID:</span><span id="r-id" class="font-bold"></span></div>
-                <div class="flex justify-between"><span>Token:</span><span id="r-amount" class="font-black text-green-600 text-lg"></span></div>
-                <div class="flex justify-between"><span>Status:</span><span class="font-bold">BERHASIL</span></div>
+                <div class="flex justify-between"><span>ID Meteran:</span><span id="r-id" class="font-bold"></span></div>
+                <div class="flex justify-between"><span>Isi Token:</span><span id="r-amount" class="font-black text-green-600 text-lg"></span></div>
+                <div class="flex justify-between"><span>Status:</span><span class="font-bold">SUKSES</span></div>
             </div>
             <button onclick="closeReceipt()" class="w-full bg-black text-white py-4 rounded-2xl font-bold">TUTUP</button>
         </div>
     </div>
 
-    <div class="glass-card w-full max-w-sm p-7 rounded-[45px] shadow-2xl relative">
+    <div class="glass-card w-full max-w-sm p-7 rounded-[45px] shadow-2xl relative flex flex-col overflow-hidden">
+        
         <div id="login-view" class="text-center py-4">
-            <h1 class="text-2xl font-black tracking-[8px] mb-10 uppercase text-blue-400">PowerLink</h1>
+            <h1 class="text-2xl font-black tracking-[6px] mb-10 uppercase text-blue-400">PowerLink</h1>
             <div class="space-y-4">
-                <button onclick="enterDash('542102176983')" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left active:scale-95">
-                    <p class="text-[9px] text-gray-500 font-bold mb-1">METERAN 1</p><p class="text-lg font-black">542102176983</p>
+                <button onclick="enterDashboard('542102176983')" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left flex justify-between items-center active:scale-95">
+                    <div><p class="text-[9px] text-gray-500 font-bold mb-1">METERAN 1</p><p class="text-lg font-black">542102176983</p></div>
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
                 </button>
-                <button onclick="enterDash('542100032687')" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left active:scale-95">
-                    <p class="text-[9px] text-gray-500 font-bold mb-1">METERAN 2</p><p class="text-lg font-black">542100032687</p>
+                <button onclick="enterDashboard('542100032687')" class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left flex justify-between items-center active:scale-95">
+                    <div><p class="text-[9px] text-gray-400 font-bold mb-1">METERAN 2</p><p class="text-lg font-black">542100032687</p></div>
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
-        <div id="dash-view" class="hidden">
+        <div id="dashboard-view" class="hidden flex-1 flex flex-col overflow-hidden">
             <header class="flex justify-between items-center mb-6">
                 <div class="text-[10px] bg-blue-500/20 px-3 py-1 rounded-full font-bold text-blue-400" id="idShow"></div>
-                <button onclick="location.reload()" class="text-[9px] font-bold opacity-40">BACK</button>
+                <button onclick="location.reload()" class="text-[9px] text-gray-500 font-bold">LOGOUT</button>
             </header>
 
-            <div id="balanceCard" class="bg-blue-500/10 rounded-[32px] p-6 border border-blue-500/20 text-center relative mb-6">
-                <div id="predictiveTag" class="absolute top-4 right-6 text-[8px] font-black text-blue-400">EST. -- HARI</div>
-                <p class="text-[9px] font-bold tracking-[2px] mb-1 opacity-50 uppercase">Sisa Saldo Token</p>
-                <div class="text-5xl font-black italic"><span id="balVal">...</span></div>
-                <div class="w-full h-1.5 bg-white/5 rounded-full mt-4 overflow-hidden">
-                    <div id="pBar" class="progress-fill h-full bg-blue-400" style="width: 0%"></div>
+            <div class="overflow-y-auto pr-1 flex-1 space-y-6">
+                <div id="balanceCard" class="bg-blue-500/10 rounded-[32px] p-6 border border-blue-500/20 text-center relative">
+                    <div id="predictiveTag" class="absolute top-4 right-6 text-[8px] font-black text-blue-400">EST. -- HARI</div>
+                    <p class="text-[9px] font-bold tracking-[2px] mb-1 opacity-50">SISA TOKEN</p>
+                    <div class="text-5xl font-black"><span id="balanceVal">...</span></div>
+                    <div class="w-full h-1.5 bg-white/5 rounded-full mt-4 overflow-hidden">
+                        <div id="pBar" class="h-full bg-blue-400" style="width: 0%"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex gap-2 bg-white/5 p-3 rounded-3xl mb-6">
-                <input type="number" id="inp" placeholder="Angka..." class="flex-1 bg-white/10 p-4 rounded-2xl outline-none font-bold">
-                <div class="flex flex-col gap-2">
-                    <button onclick="op('-')" class="bg-red-500/80 p-3 rounded-xl">-</button>
-                    <button onclick="op('+')" class="bg-green-500/80 p-3 rounded-xl">+</button>
+                <div class="flex gap-2 bg-white/5 p-3 rounded-3xl border border-white/5">
+                    <input type="number" id="mainInput" placeholder="kWh..." class="flex-1 bg-white/10 p-4 rounded-2xl text-sm outline-none font-bold">
+                    <div class="flex flex-col gap-2">
+                        <button onclick="deductPower()" class="bg-red-500 p-3 rounded-xl">-</button>
+                        <button onclick="addPower()" class="bg-green-500 p-3 rounded-xl">+</button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-6 text-center">
-                <div class="bg-white/5 p-4 rounded-2xl"><p class="text-[8px] opacity-40 mb-1">TERPAKAI</p><p class="font-black text-sm"><span id="usedVal">0</span> kWh</p></div>
-                <div class="bg-white/5 p-4 rounded-2xl"><p class="text-[8px] opacity-40 mb-1">BIAYA</p><p class="font-black text-sm text-green-400">Rp <span id="costVal">0</span>K</p></div>
+                <div id="historyLog" class="space-y-3 pb-4"></div>
             </div>
-
-            <div id="history" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
         </div>
     </div>
 
     <script>
-        const SHEET = "https://script.google.com/macros/s/AKfycbwcEAOCyHiuQuwcLJ-k4m-_xs7TstQQR3SEmCKbNUCmtrva-lUzQQ2XhBXEQoqBmEtT/exec";
-        let balance = 0, used = 0, mid = "";
+        const SHEET_URL = "https://script.google.com/macros/s/AKfycbwcEAOCyHiuQuwcLJ-k4m-_xs7TstQQR3SEmCKbNUCmtrva-lUzQQ2XhBXEQoqBmEtT/exec";
+        let balance = 0, used = 0, meterID = "";
 
-        async function enterDash(id) {
-            mid = id;
+        async function enterDashboard(id) {
+            meterID = id;
             document.getElementById('idShow').innerText = id;
             document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('dash-view').classList.remove('hidden');
-            load();
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            loadFromCloud();
         }
 
-        async function op(t) {
-            let v = parseFloat(document.getElementById('inp').value);
-            if(!v) return;
-            if(t === '+') { balance += v; document.getElementById('anime-popup').style.display = 'flex'; document.getElementById('r-amount').innerText = "+"+v+" kWh"; }
-            else { balance -= v; used += v; }
-            addLog(t === '+' ? 'Isi' : 'Pakai', v, t);
-            update();
-            save();
+        async function deductPower() {
+            const val = parseFloat(document.getElementById('mainInput').value);
+            if(!val) return;
+            balance -= val; used += val;
+            addHistory("Pakai Harian", val, "danger");
+            updateUI(); saveToCloud();
         }
 
-        function closeAnime() { document.getElementById('anime-popup').style.display = 'none'; document.getElementById('r-id').innerText = mid; document.getElementById('receipt-overlay').classList.remove('hidden'); }
+        async function addPower() {
+            const val = parseFloat(document.getElementById('mainInput').value);
+            if(!val) return;
+            balance += val;
+            addHistory("Isi Token", val, "success");
+            updateUI(); saveToCloud();
+            document.getElementById('anime-popup').style.display = 'flex';
+            document.getElementById('r-amount').innerText = "+"+val+" kWh";
+        }
+
+        function closeAnime() {
+            document.getElementById('anime-popup').style.display = 'none';
+            document.getElementById('r-id').innerText = meterID;
+            document.getElementById('receipt-overlay').classList.remove('hidden');
+        }
+
         function closeReceipt() { document.getElementById('receipt-overlay').classList.add('hidden'); }
 
-        function addLog(l, v, t) {
-            const h = document.getElementById('history');
-            const color = t === '+' ? 'text-green-400' : 'text-red-400';
-            h.insertAdjacentHTML('afterbegin', `<div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center text-xs"><span>${l}</span><b class="${color}">${t}${v} kWh</b></div>`);
-            document.getElementById('inp').value = '';
+        function addHistory(label, val, type) {
+            const color = type === "danger" ? "text-red-400" : "text-green-400";
+            document.getElementById('historyLog').insertAdjacentHTML('afterbegin', `<div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center text-xs"><span>${label}</span><b class="${color}">${type === "danger" ? "-" : "+"}${val} kWh</b></div>`);
+            document.getElementById('mainInput').value = "";
         }
 
-        function update() {
-            document.getElementById('balVal').innerText = balance.toFixed(1);
-            document.getElementById('usedVal').innerText = used.toFixed(1);
-            document.getElementById('costVal').innerText = Math.floor(used * 1.45);
+        function updateUI() {
+            document.getElementById('balanceVal').innerText = balance.toFixed(1);
             document.getElementById('pBar').style.width = Math.min(balance, 100) + "%";
-            if(balance < 10) document.getElementById('balanceCard').classList.add('danger-mode');
-            else document.getElementById('balanceCard').classList.remove('danger-mode');
         }
 
-        async function save() {
+        async function saveToCloud() {
             document.getElementById('sync-status').innerText = "SYNCING...";
-            await fetch(SHEET + "?" + new URLSearchParams({action: "save", meterID: mid, balance: balance, used: used, history: document.getElementById('history').innerHTML}));
+            await fetch(SHEET_URL + "?" + new URLSearchParams({action: "save", meterID: meterID, balance: balance, used: used, history: document.getElementById('historyLog').innerHTML}));
             document.getElementById('sync-status').innerText = "SYNCED";
         }
 
-        async function load() {
+        async function loadFromCloud() {
             document.getElementById('sync-status').innerText = "LOADING...";
             try {
-                const r = await fetch(SHEET + "?meterID=" + mid + "&t=" + Date.now());
+                const r = await fetch(SHEET_URL + "?meterID=" + meterID + "&t=" + Date.now());
                 const d = await r.json();
-                if(d) { balance = parseFloat(d.balance || 0); used = parseFloat(d.used || 0); document.getElementById('history').innerHTML = d.history || ""; }
-                update();
+                if(d) { balance = parseFloat(d.balance || 0); used = parseFloat(d.used || 0); document.getElementById('historyLog').innerHTML = d.history || ""; }
+                updateUI();
                 document.getElementById('sync-status').innerText = "SYNCED";
-            } catch(e) { document.getElementById('sync-status').innerText = "OFFLINE"; }
+            } catch (e) { document.getElementById('sync-status').innerText = "OFFLINE"; }
         }
 
         // Lightning
-        const c = document.getElementById('lightning');
-        const x = c.getContext('2d');
-        function init() { c.width = window.innerWidth; c.height = window.innerHeight; }
+        const canvas = document.getElementById('lightning');
+        const ctx = canvas.getContext('2d');
+        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.onresize = init; init();
         function draw() {
-            x.fillStyle = 'rgba(5, 7, 10, 0.2)'; x.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = 'rgba(5, 7, 10, 0.2)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             if(Math.random() > 0.95) {
-                x.strokeStyle = '#00d2ff'; x.lineWidth = 2;
-                let px = Math.random() * c.width, py = 0; x.beginPath(); x.moveTo(px, py);
-                while(py < c.height) { px += (Math.random()-0.5)*60; py += 20; x.lineTo(px, py); }
-                x.stroke();
+                ctx.strokeStyle = '#00d2ff'; ctx.lineWidth = 2;
+                let x = Math.random() * canvas.width, y = 0; ctx.beginPath(); ctx.moveTo(x, y);
+                while(y < canvas.height) { x += (Math.random()-0.5)*50; y += 20; ctx.lineTo(x, y); }
+                ctx.stroke();
             }
             requestAnimationFrame(draw);
         }
