@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerLink Pro - Total Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: { dark: '#05070a', primary: '#00d2ff', secondary: '#3a7bd5', glass: 'rgba(10, 15, 25, 0.95)', success: '#27ae60', danger: '#ff4757' },
+                    },
+                    boxShadow: { 'neon': '0 0 25px rgba(0, 210, 255, 0.4)', 'danger': '0 0 30px rgba(255, 71, 87, 0.5)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, sans-serif; overflow: hidden; background: #05070a; transition: background 0.3s; }
+        .light body { background: #f0f2f5; }
+        canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .glass-card { backdrop-filter: blur(40px); z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
+        .light .glass-card { background: rgba(255, 255, 255, 0.9); border-color: rgba(0,0,0,0.1); color: #000; }
+        .progress-fill { transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-red { 0%, 100% { background: rgba(255, 71, 87, 0.1); border-color: rgba(255, 71, 87, 0.3); } 50% { background: rgba(255, 71, 87, 0.3); border-color: rgba(255, 71, 87, 1); } }
+        .danger-mode { animation: pulse-red 1.5s infinite !important; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        #receipt-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
+        .meter-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .meter-btn:active { transform: scale(0.95); }
+
+        /* ANIME MOD STYLE */
+        #anime-popup { display: none; position: fixed; inset: 0; z-index: 150; background: rgba(5,7,10,0.9); backdrop-filter: blur(10px); align-items: center; justify-content: center; flex-direction: column; }
+        .anime-img { width: 220px; filter: drop-shadow(0 0 15px #00d2ff); animation: animeUp 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        @keyframes animeUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="min-h-screen flex justify-center items-center p-6 text-white">
+
+    <audio id="thunder-sound"><source src="https://www.soundjay.com/nature/thunder-utility-1.mp3" type="audio/mpeg"></audio>
+    <canvas id="lightning"></canvas>
+
+    <div id="anime-popup" class="p-6">
+        <img src="https://i.ibb.co/vYF8WfK/anime-happy-celebrate.png" class="anime-img mb-6">
+        <h2 class="text-3xl font-black text-cyber-primary italic tracking-tighter mb-2">MANTAP!</h2>
+        <p class="text-white font-bold mb-8">Token Berhasil Terisi ⚡</p>
+        <button onclick="closeAnime()" class="bg-white text-black px-10 py-3 rounded-2xl font-black text-xs tracking-widest uppercase active:scale-95">CLOSE</button>
+    </div>
+
+    <div id="receipt-overlay" class="p-6">
+        <div class="bg-white text-black p-8 rounded-[35px] w-full max-w-xs shadow-2xl text-center fade-in">
+            <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h2 class="font-black text-xl mb-1">STRUK TOKEN</h2>
+            <div class="space-y-3 text-left text-sm border-t border-dashed border-gray-200 pt-4 mb-6 mt-4">
+                <div class="flex justify-between"><span>ID Pel:</span><span id="r-id" class="font-bold"></span></div>
+                <div class="flex justify-between"><span>Jumlah:</span><span id="r-amount" class="font-black text-cyber-success text-lg"></span></div>
+                <div class="flex justify-between"><span>Status:</span><span class="font-bold">BERHASIL</span></div>
+            </div>
+            <button onclick="closeReceipt()" class="w-full bg-black text-white py-4 rounded-2xl font-bold active:scale-95">TUTUP</button>
+        </div>
+    </div>
+
+    <div class="glass-card bg-cyber-glass w-full max-w-sm p-7 rounded-[45px] shadow-2xl relative max-h-[90vh] overflow-hidden flex flex-col">
+        
+        <div id="login-view" class="text-center py-4 fade-in">
+            <button onclick="enablePower()" class="bg-gradient-to-br from-cyber-primary to-cyber-secondary p-6 rounded-[24px] mx-auto mb-8 shadow-neon active:scale-90 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 L3 14 H12 L11 22 L21 10 H12 L13 2 Z"/></svg>
+            </button>
+            <h1 class="text-2xl font-light tracking-[6px] mb-2 uppercase">PowerLink</h1>
+            <p class="text-[10px] text-cyber-primary font-bold tracking-[3px] mb-10 opacity-70 uppercase">MONITORING LISTRIK</p>
+            
+            <div class="space-y-4">
+                <button onclick="enterDashboard('542102176983')" class="meter-btn w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left flex justify-between items-center hover:bg-white/10">
+                    <div>
+                        <p class="text-[9px] text-gray-400 font-bold tracking-widest uppercase mb-1">METERAN/ID PELANGGAN 1</p>
+                        <p class="text-lg font-black tracking-tight">542102176983</p>
+                    </div>
+                    <svg class="w-5 h-5 text-cyber-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                <button onclick="enterDashboard('542100032687')" class="meter-btn w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-left flex justify-between items-center hover:bg-white/10">
+                    <div>
+                        <p class="text-[9px] text-gray-400 font-bold tracking-widest uppercase mb-1">METERAN/ID PELANGGAN 2</p>
+                        <p class="text-lg font-black tracking-tight">542100032687</p>
+                    </div>
+                    <svg class="w-5 h-5 text-cyber-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="dashboard-view" class="hidden fade-in flex-1 flex flex-col overflow-hidden">
+            <header class="flex justify-between items-center mb-6 shrink-0">
+                <button onclick="toggleTheme()" class="bg-white/10 p-2 rounded-xl border border-white/10">
+                    <svg id="theme-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
+                <div class="text-[10px] bg-white/10 px-3 py-1 rounded-full border border-white/10 tracking-wider" id="idShow"></div>
+                <button onclick="location.reload()" class="text-[9px] text-gray-500 font-bold uppercase">Back</button>
+            </header>
+
+            <div class="overflow-y-auto pr-1 flex-1 space-y-6">
+                <div id="balanceCard" class="bg-gradient-to-br from-cyber-primary/20 to-transparent rounded-[32px] p-6 border border-cyber-primary/20 text-center shadow-neon transition-all duration-500 relative">
+                    <div id="predictiveTag" class="absolute top-4 right-6 text-[8px] font-black text-cyber-primary opacity-60">EST. -- HARI</div>
+                    <p id="alertTitle" class="text-[9px] text-cyber-primary font-bold tracking-[2px] mb-1 uppercase">Sisa Saldo Token</p>
+                    <div class="text-5xl font-black tracking-tighter mb-1"><span id="balanceVal">12.5</span></div>
+                    <p class="text-[11px] font-medium opacity-60 uppercase tracking-widest">kWh Tersedia</p>
+                    <div class="w-full h-1.5 bg-white/5 rounded-full mt-4 overflow-hidden">
+                        <div id="pBar" class="progress-fill h-full bg-cyber-primary shadow-neon" style="width: 12.5%"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-[10px] text-gray-500 ml-1 font-bold uppercase tracking-widest">Update Saldo & Pemakaian</p>
+                    <div class="flex gap-2 bg-white/5 p-3 rounded-3xl border border-white/5">
+                        <input type="number" id="mainInput" placeholder="Masukkan angka..." class="flex-1 bg-white/10 border border-white/10 rounded-2xl p-4 text-sm outline-none focus:border-cyber-primary text-inherit">
+                        <div class="flex flex-col gap-2">
+                            <button onclick="deductPower()" class="bg-cyber-danger p-3 rounded-xl active:scale-90 transition-all border-none shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /></svg>
+                            </button>
+                            <button onclick="addPower()" class="bg-cyber-success p-3 rounded-xl active:scale-90 transition-all border-none shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
+                        <p class="text-[8px] text-gray-500 mb-1 uppercase font-bold tracking-tighter">Terpakai</p>
+                        <p class="text-lg font-black"><span id="usedVal">184.2</span> <small class="text-[9px] opacity-40">kWh</small></p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
+                        <p class="text-[8px] text-gray-500 mb-1 uppercase font-bold tracking-tighter">Biaya</p>
+                        <p class="text-lg font-black text-cyber-success">Rp <span id="costVal">268K</span></p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 px-1">Riwayat Aktivitas</h3>
+                    <div id="historyLog" class="space-y-3 pb-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('lightning');
+        const ctx = canvas.getContext('2d');
+        const thunder = document.getElementById('thunder-sound');
+        let w, h, soundOn = false;
+
+        function init() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        window.onresize = init; init();
+        
+        function enablePower() { 
+            soundOn = true; 
+            thunder.play().then(() => { thunder.pause(); thunder.currentTime = 0; });
+        }
+
+        function draw() {
+            ctx.fillStyle = document.documentElement.classList.contains('light') ? 'rgba(240, 242, 245, 0.2)' : 'rgba(5, 7, 10, 0.2)'; 
+            ctx.fillRect(0, 0, w, h);
+            if (Math.random() > 0.96) {
+                ctx.strokeStyle = '#00d2ff'; ctx.lineWidth = 3; ctx.shadowBlur = 25; ctx.shadowColor = '#00d2ff';
+                let x = Math.random() * w, y = 0; ctx.beginPath(); ctx.moveTo(x, y);
+                while(y < h) { x += (Math.random()-0.5)*80; y += Math.random()*30; ctx.lineTo(x, y); }
+                ctx.stroke();
+                if(soundOn) { const s = thunder.cloneNode(); s.volume = 0.3; s.play(); }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // --- CORE LOGIC ---
+        let balance = 12.5; let used = 184.2; let dailyUsage = []; let meterID = "";
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('light');
+            const icon = document.getElementById('theme-icon');
+            icon.innerHTML = html.classList.contains('light') ? 
+                '<path stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>' : 
+                '<path stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>';
+        }
+
+        function enterDashboard(id) {
+            meterID = id;
+            document.getElementById('idShow').innerText = "ID: " + meterID;
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            addHistory("System Login", 0, "success");
+        }
+
+        function deductPower() {
+            const val = parseFloat(document.getElementById('mainInput').value);
+            if(!val || val <= 0) return;
+            if(val > balance) return alert("Saldo tidak cukup!");
+            balance -= val; used += val;
+            dailyUsage.push(val); 
+            addHistory("Pakai Harian", val, "danger");
+            updateUI();
+        }
+
+        function addPower() {
+            const val = parseFloat(document.getElementById('mainInput').value);
+            if(!val || val <= 0) return;
+            balance += val;
+            addHistory("Isi Token", val, "success");
+            updateUI();
+            
+            // ANIME TRIGGER
+            document.getElementById('anime-popup').style.display = 'flex';
+        }
+
+        function closeAnime() {
+            document.getElementById('anime-popup').style.display = 'none';
+            showReceipt(parseFloat(document.getElementById('r-amount').innerText)); // Munculkan struk setelah anime tutup
+        }
+
+        function showReceipt(val) {
+            document.getElementById('r-id').innerText = meterID;
+            document.getElementById('r-amount').innerText = "+" + val + " kWh";
+            document.getElementById('receipt-overlay').style.display = 'flex';
+        }
+
+        function closeReceipt() { document.getElementById('receipt-overlay').style.display = 'none'; }
+
+        function addHistory(label, val, type) {
+            const log = document.getElementById('historyLog');
+            const now = new Date();
+            const time = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
+            const symbol = type === "danger" ? "-" : (type === "success" && val > 0 ? "+" : "");
+            const color = type === "danger" ? "text-cyber-danger" : "text-cyber-success";
+            
+            const item = `<div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5 fade-in">
+                <div><p class="text-xs font-bold font-mono italic text-inherit">${label}</p><p class="text-[9px] opacity-50">${now.getDate()} Mar • ${time}</p></div>
+                <p class="text-sm font-black ${color}">${symbol} ${val > 0 ? val + ' kWh' : 'Active'}</p>
+            </div>`;
+            log.insertAdjacentHTML('afterbegin', item);
+            document.getElementById('mainInput').value = "";
+        }
+
+        function updateUI() {
+            document.getElementById('balanceVal').innerText = balance.toFixed(1);
+            document.getElementById('usedVal').innerText = used.toFixed(1);
+            document.getElementById('pBar').style.width = (Math.min(balance, 100)) + "%";
+            document.getElementById('costVal').innerText = Math.floor(used * 1.45) + "K";
+
+            if(dailyUsage.length > 0) {
+                const avg = dailyUsage.reduce((a,b) => a+b, 0) / dailyUsage.length;
+                const est = Math.floor(balance / avg);
+                document.getElementById('predictiveTag').innerText = `EST. ${est} HARI`;
+            }
+
+            const card = document.getElementById('balanceCard');
+            const bar = document.getElementById('pBar');
+            if(balance < 10) {
+                card.classList.add('danger-mode');
+                bar.classList.replace('bg-cyber-primary', 'bg-cyber-danger');
+            } else {
+                card.classList.remove('danger-mode');
+                bar.classList.replace('bg-cyber-danger', 'bg-cyber-primary');
+            }
+        }
+    </script>
+</body>
+</html>
