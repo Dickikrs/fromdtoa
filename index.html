@@ -281,23 +281,26 @@
         }
 
         // --- CLOUD SYNC FUNCTIONS ---
-                async function saveToCloud() {
+                        async function saveToCloud() {
             const status = document.getElementById('sync-status');
             status.innerText = "Saving...";
-            const data = {
+            
+            // Kita kirim lewat URL parameter agar pasti masuk
+            const params = new URLSearchParams({
+                action: "save",
                 meterID: meterID,
                 balance: balance,
                 used: used,
                 history: document.getElementById('historyLog').innerHTML
-            };
+            });
+
             try {
-                // Kita kirim lewat POST body agar data besar (seperti history) masuk semua
-                await fetch(SHEET_URL, {
-                    method: "POST",
-                    body: JSON.stringify(data)
-                });
+                await fetch(SHEET_URL + "?" + params.toString(), { method: "GET" });
                 status.innerText = "Synced: " + meterID;
-            } catch (e) { status.innerText = "Offline"; }
+            } catch (e) { 
+                status.innerText = "Saved (Offline Mode)"; 
+                console.log(e);
+            }
         }
 
         async function loadFromCloud() {
@@ -311,14 +314,14 @@
                     used = parseFloat(data.used);
                     document.getElementById('historyLog').innerHTML = data.history || "";
                 } else {
-                    // Jika meteran baru (belum ada di sheet)
-                    balance = 12.5;
-                    used = 0;
-                    document.getElementById('historyLog').innerHTML = "";
+                    balance = 12.5; used = 0; document.getElementById('historyLog').innerHTML = "";
                 }
                 updateUI();
-                status.innerText = "Synced: " + meterID;
-            } catch (e) { status.innerText = "Offline"; updateUI(); }
+                status.innerText = "Ready: " + meterID;
+            } catch (e) { 
+                status.innerText = "Connect Error"; 
+                updateUI(); 
+            }
         }
     </script>
 </body>
